@@ -1,0 +1,21 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+	"title": "User API Spec",
+	"description": "User API untuk login, register, ",
+	"version": "1.0.0"
+  },
+  "servers": [
+	{
+	  "url": "https://localhost:8000/v1"
+	}
+  ],
+  "paths": {
+    "/users" : {
+      "post" : {
+        "summary": "user register",
+        "description": "user register berdasarkan email dan password yang diberikan admin"
+      }
+    }
+  }
+}

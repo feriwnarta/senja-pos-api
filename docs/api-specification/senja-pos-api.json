@@ -1,0 +1,420 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+	"title": "SENJA POS API",
+	"description": "LIST OF API SENJA POS",
+	"version": "1.0.0"
+  },
+  "servers": [
+	{
+	  "url": "https://{environment}.localhost:8000/{version}",
+	  "variables": {
+		"environment" : {
+		  "default": "dev",
+		  "enum": [
+			"dev",
+			"prod"
+		  ]
+		},
+		"version" : {
+		  "description": "api version",
+		  "default": "v1",
+		  "enum": [
+			"v1"
+		  ]
+		}
+	  }
+	}
+  ],
+  "components": {
+	"parameters": {
+	  "authorization" : {
+		"description": "Token yang perlu dikirim untuk mengakses resources",
+		"name": "Authorization",
+		"in": "header",
+		"required": true,
+		"schema": {
+		  "type": "string"
+		},
+		"examples" : {
+		  "token": {
+			"value": "65as4d65as4d56a"
+		  }
+		}
+	  }
+	},
+	"responses": {
+	  "401Unauthorized" : {
+		"description": "Gagal mengakses resource saat user tidak mengirim token",
+		"content" : {
+		  "application/json" : {
+			"schema" : {
+			  "type": "object",
+			  "items": {
+				"type": "string"
+			  }
+			},
+			"examples": {
+			  "data tidak ada saat dicari" : {
+				"summary": "failed",
+				"value" : {
+				  "errors" : "Unauthorized"
+				}
+			  }
+			}
+		  }
+		}
+	  }
+	}
+  },
+  "paths": {
+	"/ingredients/raws" : {
+	  "get" : {
+		"tags": ["Ingredients"],
+		"summary" : "Menampilkan daftar raw ingredients",
+		"description" : "Menampilkan daftar dari raw ingredient, serta menerapkan fitur searching",
+		"parameters" : [
+		  {
+			"$ref": "#/components/parameters/authorization"
+		  },
+		  {
+			"description": "Mengambil semua data raw ingredients dengan fitur searching",
+			"name" : "q",
+			"in": "query",
+			"required": false,
+			"schema": {
+			  "type": "string"
+			},
+			"examples" : {
+			  "cari berdasarkan nama" : {
+				"value" : "Daging ayam"
+			  },
+			  "cari berdasarkan kategori" : {
+				"value" : "Meat"
+			  },
+			  "cari berdasarkan code" : {
+				"value" : "RAWINGR0001"
+			  }
+			}
+		  }
+
+		],
+		"responses" : {
+		  "200" : {
+			"description": "Berhasil dapatkan data raw ingredients",
+			"content" : {
+				"application/json" : {
+				  "schema" : {
+					"type": "object",
+					"items": {
+					  "type": "object"
+					}
+				  },
+				  "examples": {
+					"success tanpa search" : {
+					  "summary": "Contoh berhasil tanpa search",
+					  "description": "Berhasil dapatkan semua data raw ingredient tanpa search",
+					  "value": {
+						"data":[
+						  {
+							"id" : "uuid",
+							"name" : "Daging ayam",
+							"category" : "Meat",
+							"unit" : "Gram (GR)",
+							"in_stock" : "2000",
+							"minimum_stock" : "1000",
+							"average_cost" : "Rp. 400,00",
+							"placements" : [
+							  "Central Kitchen",
+							  "Outlet Cahaya Senja PIK"
+							]
+						  },
+						  {
+							"id" : "uuid",
+							"name" : "Tepung",
+							"category" : "Bubuk",
+							"unit" : "Gram (GR)",
+							"in_stock" : "10000",
+							"minimum_stock" : "4000",
+							"average_cost" : "Rp. 100,00",
+							"placements" : [
+							  "Central Kitchen",
+							  "Outlet Cahaya Senja PIK"
+							]
+						  }
+						],
+						"links" : {
+						  "first": "https://example.com/api/users?page=1",
+						  "last": "https://example.com/api/users?page=5",
+						  "prev": null,
+						  "next": "https://example.com/api/users?page=2"
+						},
+						"meta" : {
+						  "current_page": 1,
+						  "from": 1,
+						  "last_page": 5,
+						  "path": "https://example.com/api/users",
+						  "per_page": 10,
+						  "to": 10,
+						  "total": 50
+						}
+					  }
+					},
+					"success dengan search" : {
+					  "summary": "Contoh berhasil dengan search",
+					  "description": "Berhasil dapatkan semua data raw ingredient dengan search",
+					  "value": {
+						"data":[
+						  {
+							"id" : "uuid",
+							"name" : "Daging ayam",
+							"category" : "Meat",
+							"unit" : "Gram (GR)",
+							"in_stock" : "2000",
+							"minimum_stock" : "1000",
+							"average_cost" : "Rp. 32.000,00",
+							"placements" : [
+							  "Central Kitchen",
+							  "Outlet Cahaya Senja PIK"
+							]
+						  },
+						  {
+							"id" : "uuid",
+							"name" : "Daging babi",
+							"category" : "Meat",
+							"unit" : "Gram (GR)",
+							"in_stock" : "10000",
+							"minimum_stock" : "4000",
+							"average_cost" : "Rp. 80.000,00",
+							"placements" : [
+							  "Central Kitchen",
+							  "Outlet Cahaya Senja PIK"
+							]
+						  }
+						],
+						"links" : {
+						  "first": "https://example.com/api/users?page=1",
+						  "last": "https://example.com/api/users?page=5",
+						  "prev": null,
+						  "next": "https://example.com/api/users?page=2"
+						},
+						"meta" : {
+						  "current_page": 1,
+						  "from": 1,
+						  "last_page": 5,
+						  "path": "https://example.com/api/users",
+						  "per_page": 10,
+						  "to": 10,
+						  "total": 50
+						}
+					  }
+					},
+					"success tanpa data" : {
+					  "summary": "Contoh berhasil saat di search tetapi tidak menghasil data",
+					  "value": {
+						"data" : {},
+						"links" : {},
+						"meta" : {}
+					  }
+					}
+				  }
+				}
+			}
+		  },
+		  "401" : {
+			"$ref": "#/components/responses/401Unauthorized"
+		  }
+		}
+	  },
+	  "post" : {
+		"tags": ["Ingredients"],
+		"summary" : "Membuat raw ingredients baru",
+		"description" : "Membuat master data raw ingredients baru",
+		"parameters": [
+		  {
+			"$ref": "#/components/parameters/authorization"
+		  }
+		],
+		"requestBody": {
+		  "required": true,
+		  "content": {
+			"multipart/form-data": {
+			  "schema": {
+				"type": "object",
+				"properties": {
+				  "code": {
+					"type": "string",
+					"minLength": 5,
+					"maxLength": 12
+				  },
+				  "name": {
+					"type": "string",
+					"minLength": 2,
+					"maxLength": 100
+				  },
+				  "category_id": {
+					"type": "string",
+					"minLength": 36,
+					"maxLength": 36
+				  },
+				  "unit_id": {
+					"type": "string",
+					"minLength": 36,
+					"maxLength": 36
+				  },
+				  "stock_alert": {
+					"type": "integer",
+					"default": 0
+				  },
+				  "initial_stock": {
+					"type": "integer",
+					"default": 0
+				  },
+				  "initial_average_cost": {
+					"type": "number",
+					"default": 0
+				  },
+				  "placement": {
+					"type": "array",
+					"minItems": 1,
+					"items": {
+					  "type": "string",
+					  "minLength": 36,
+					  "maxLength": 36
+					}
+				  },
+				  "image": {
+					"description": "Upload gambar raw ingredients",
+					"type": "string",
+					"format": "binary"
+				  }
+				},
+				"required": ["code", "name", "category_id", "unit_id", "placement"]
+			  }
+			}
+		  }
+		},
+		"responses": {
+		  "201" : {
+			  "description": "berhasil buat raw ingredient",
+			  "content": {
+				"application/json" : {
+				  "schema": {
+					"type": "object"
+				  },
+				  "examples": {
+					"success full request body" : {
+					  "summary": "response dari full request body",
+					  "description": "response ini didapatkan saat request body dikirim secara full",
+					  "value": {
+						"data" : {
+						  "id" : "ac816b53-2f82-4282-8266-39dbf9360589",
+						  "image" : "https://localhost:8000/image/raw.jpg",
+						  "code": "RAW-INGREDIENTS-0001",
+						  "name": "Daging ayam",
+						  "category_id": "ac816b53-2f82-4282-8266-39dbf9360944",
+						  "unit_id": "6361f552-de08-4a2e-ba45-183a67d5276b",
+						  "stock_alert": 10,
+						  "initial_stock": 100,
+						  "initial_average_cost": 32.5,
+						  "placement": [
+							"6191edbf-a978-44e6-86be-127a8cb3fa09"
+						  ]
+						}
+					  }
+					},
+					"success half request body" : {
+					  "summary": "response dari half request body",
+					  "description": "mengambalikan response saat initial stock & average cost tidak dikirim request",
+					  "value" : {
+						"data" : {
+						  "id" : "ac816b53-2f82-4282-8266-39dbf9360589",
+						  "image" : "https://localhost:8000/image/raw.jpg",
+						  "code": "RAW-INGREDIENTS-0001",
+						  "name": "Daging ayam",
+						  "category_id": "ac816b53-2f82-4282-8266-39dbf9360944",
+						  "unit_id": "6361f552-de08-4a2e-ba45-183a67d5276b",
+						  "stock_alert": 10,
+						  "initial_stock": 0,
+						  "initial_average_cost": 0,
+						  "placement": [
+							"6191edbf-a978-44e6-86be-127a8cb3fa09"
+						  ]
+						}
+					  }
+					}
+				  }
+				}
+			  }
+			},
+		  "400" : {
+			"description": "gagal buat raw ingredients, dikarenakan kesalahan validasi request body",
+			"content": {
+				"application/json" : {
+				  "schema": {
+					"type": "object"
+				  },
+				  "examples": {
+					"failed validation" : {
+					  "summary": "validation error",
+					  "description": "kesalahan untuk client jika validation tidak berhasil, pastikan schema request body sudah sesuai.",
+					  "value": {
+						"errors" : {
+						  "code" : ["The code field must be at least 5 characters."],
+						  "unit_id" : ["The unit_id field is required."],
+						  "category_id" : ["The category_id is not found"]
+						}
+					  }
+					}
+				  }
+				}
+			}
+		  },
+		  "401" : {
+			"$ref": "#/components/responses/401Unauthorized"
+		  }
+		}
+	  }
+	},
+	"/ingredients/semi-finishes" : {
+	  "get" : {
+		"tags": ["Ingredients"],
+		"summary": "Menampilkan daftar semi finish ingredients",
+		"description": "Menampilkan daftar semi finish ingredients secara lengkap berdasarkan fitur searching & filtering",
+		"parameters": [
+		  {
+			"description": "Ambil berdsarkan pencarian",
+			"required": false,
+			"name": "q",
+			"in" : "query",
+			"schema": {
+			  "type": "string"
+			},
+			"examples": {
+			  "cari berdasarkan nama" : {
+				"summary": "cara berdasarkan nama",
+				"value": "Ayam cincang kecap"
+			  },
+			  "cari berdasarkan category" : {
+				"summary": "cara berdasarkan category",
+				"value": "Ayam"
+			  }
+			}
+		  }
+
+		],
+		"responses": {
+			"200" : {},
+		  	"401" : {
+			  "$ref": "#/components/responses/401Unauthorized"
+			}
+		}
+	  },
+	  "post" : {
+
+	  }
+	}
+
+  }
+
+}
