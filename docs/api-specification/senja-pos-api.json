@@ -404,14 +404,11 @@
 
 		],
 		"responses": {
-			"200" : {},
+
 		  	"401" : {
 			  "$ref": "#/components/responses/401Unauthorized"
 			}
 		}
-	  },
-	  "post" : {
-
 	  }
 	}
 
