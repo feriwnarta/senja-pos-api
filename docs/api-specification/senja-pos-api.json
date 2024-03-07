@@ -741,8 +741,7 @@
                                 }
                             },
                             "examples": {
-                                "success": {
-                                    "summary": "Sukses",
+                                "valid": {
                                     "value": {
                                         "code": "UNIT-01",
                                         "name": "Daging"
@@ -1002,6 +1001,149 @@
                                 }
                             }
                         }
+                    }
+                }
+            }
+        },
+        "/ingredients/recipes/semi-finish": {
+            "post": {
+                "summary": "buat resep semi finish good baru",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/authorization"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "semi_finish_ingredient_id": {
+                                        "required": true,
+                                        "type": "string",
+                                        "minLength": 36,
+                                        "maxLength": 36
+                                    },
+                                    "outcome": {
+                                        "required": true,
+                                        "type": "number",
+                                        "minimum": 1
+                                    },
+                                    "ingredients": {
+                                        "description": "isi dari properties ini adalah array dengan susunan id (raw / semi finish) dan usage",
+                                        "required": true,
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "minProperties": 2,
+                                            "properties": {
+                                                "id": {
+                                                    "description": "id raw / semi finish ingredients",
+                                                    "required": true,
+                                                    "type": "string",
+                                                    "minLength": 36,
+                                                    "maxLength": 36
+                                                },
+                                                "usage": {
+                                                    "description": "jumlah pemakaian resep",
+                                                    "required": true,
+                                                    "type": "number",
+                                                    "minimum": 1
+                                                }
+                                            }
+                                        },
+                                        "minItems": 1
+                                    }
+                                }
+                            },
+                            "examples": {
+                                "valid": {
+                                    "summary": "contoh valid buat resep semi finish",
+                                    "value": {
+                                        "semi_finish_ingredient_id": "ac816b53-2f82-4282-8266-39dbf93601231",
+                                        "outcome": 1000,
+                                        "ingredients": [
+                                            {
+                                                "id": "asd51316b53-2f82-4282-8266-39dbf93601231",
+                                                "usage": 60
+                                            },
+                                            {
+                                                "id": "asd17912301-2f82-4282-8266-39dbf93601231",
+                                                "usage": 90
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "sukses buat resep semi finish (not finish)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "success": {
+                                        "summary": "sukses buat resep semi finish baru",
+                                        "value": {
+                                            "data": {
+                                                "id": "",
+                                                "code": "",
+                                                "semi-finish": {
+                                                    "id": "",
+                                                    "name": ""
+                                                },
+                                                "recipes": [
+                                                    {
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "gagal buat resep semi finish karena validasi tidak sukses",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "gagal validasi outcome": {
+                                        "description": "gagal buat resep semi finish saat validasi gagal",
+                                        "value": {
+                                            "errors": {
+                                                "outcome": [
+                                                    "The outcome field must be 1 or higher"
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "gagal validasi ingredient usage": {
+                                        "description": "gagal buat resep semi finish saat validasi array ingredients dengan key usage gagal",
+                                        "value": {
+                                            "errors": {
+                                                "ingredients.0.usage": [
+                                                    "The amount used for the first ingredient (index 0) must be at least 1"
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401Unauthorized"
                     }
                 }
             }
