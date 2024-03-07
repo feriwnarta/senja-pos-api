@@ -131,7 +131,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Berhasil dapatkan data raw ingredients",
+                        "description": "Response berhasil dapatkan data raw ingredients, response menggunakan pencarian atau tanpa pencarian sama",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -442,6 +442,120 @@
                     }
                 ],
                 "responses": {
+                    "200": {
+                        "description": "menampilkan daftar semi finish ingredients, hasil dengan pencarian dan tanpa pencarian sama",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "hasil tanpa pencarian": {
+                                        "value": {
+                                            "data": [
+                                                {
+                                                    "id": "asd2316b53-2f82-4282-8266-39dbf93601232",
+                                                    "code": "SFING0001",
+                                                    "name": "Ayam cincang kecap",
+                                                    "category": "Ayam",
+                                                    "unit": "Gram (Gr)",
+                                                    "stock_alert": "200",
+                                                    "total_ingredients": "10 Ingredients",
+                                                    "placements": [
+                                                        {
+                                                            "id": "",
+                                                            "name": ""
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "id": "ddd2316b53-2f82-4282-8266-39dbf93601232",
+                                                    "code": "SFING0002",
+                                                    "name": "Babi panggang",
+                                                    "category": "Babi",
+                                                    "unit": "Gram (Gr)",
+                                                    "stock_alert": "100",
+                                                    "total_ingredients": "10 Ingredients",
+                                                    "placements": [
+                                                        {
+                                                            "id": "",
+                                                            "name": ""
+                                                        }
+                                                    ]
+                                                }
+                                            ],
+                                            "links": {
+                                                "first": "https://example.com/api/users?page=1",
+                                                "last": "https://example.com/api/users?page=5",
+                                                "prev": null,
+                                                "next": "https://example.com/api/users?page=2"
+                                            },
+                                            "meta": {
+                                                "current_page": 1,
+                                                "from": 1,
+                                                "last_page": 5,
+                                                "path": "https://example.com/api/users",
+                                                "per_page": 10,
+                                                "to": 10,
+                                                "total": 50
+                                            }
+                                        }
+                                    },
+                                    "hasil dengan pencarian": {
+                                        "value": {
+                                            "data": [
+                                                {
+                                                    "id": "asd2316b53-2f82-4282-8266-39dbf93601232",
+                                                    "code": "SFING0001",
+                                                    "name": "Ayam cincang kecap",
+                                                    "category": "Ayam",
+                                                    "unit": "Gram (Gr)",
+                                                    "stock_alert": "200",
+                                                    "total_ingredients": "10 Ingredients",
+                                                    "placements": [
+                                                        {
+                                                            "id": "",
+                                                            "name": ""
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "id": "ddd2316b53-2f82-4282-8266-39dbf93601232",
+                                                    "code": "SFING0010",
+                                                    "name": "Ayam giling",
+                                                    "category": "Ayam",
+                                                    "unit": "Gram (Gr)",
+                                                    "stock_alert": "1000",
+                                                    "total_ingredients": "9 Ingredients",
+                                                    "placements": [
+                                                        {
+                                                            "id": "",
+                                                            "name": ""
+                                                        }
+                                                    ]
+                                                }
+                                            ],
+                                            "links": {
+                                                "first": "https://example.com/api/users?page=1",
+                                                "last": "https://example.com/api/users?page=5",
+                                                "prev": null,
+                                                "next": "https://example.com/api/users?page=2"
+                                            },
+                                            "meta": {
+                                                "current_page": 1,
+                                                "from": 1,
+                                                "last_page": 5,
+                                                "path": "https://example.com/api/users",
+                                                "per_page": 10,
+                                                "to": 10,
+                                                "total": 50
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "$ref": "#/components/responses/401Unauthorized"
                     }
@@ -666,7 +780,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "sukses menampilkan daftar category",
+                        "description": "sukses menampilkan daftar category, response menggunakan pencarian atau tanpa pencarian sama",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -872,7 +986,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "response yang menghasilkan daftar unit ingredient",
+                        "description": "response yang menghasilkan daftar unit ingredient, response menggunakan pencarian atau tanpa pencarian sama",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -880,7 +994,7 @@
                                 },
                                 "examples": {
                                     "hasil tanpa pencarian": {
-                                        "summary": "hasil tanpa carian",
+                                        "summary": "hasil tanpa pencarian",
                                         "value": {
                                             "data": [
                                                 {
@@ -1040,6 +1154,121 @@
             }
         },
         "/ingredients/recipes/semi-finish": {
+            "get": {
+                "summary": "Menampilkan daftar semi finish good recipe",
+                "description": "Menampilkan daftar semi finish good recipe dengan fitur searching",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/authorization"
+                    },
+                    {
+                        "description": "cari semi finish qood recipes",
+                        "name": "q",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "examples": {
+                            "cari berdasarkan nama item": {
+                                "description": "cari berdasarkan nama item semi finish",
+                                "value": "Ayam cincang"
+                            },
+                            "cari berdasarkan code": {
+                                "description": "cari berdasarkan nama kode resep",
+                                "value": "SFGR0001"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "daftar resep semi finish good, response menggunakan pencarian atau tanpa pencarian sama",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "hasil tanpa pencarian": {
+                                        "value": {
+                                            "data": [
+                                                {
+                                                    "id": "I21316b53-2f82-4282-8266-39dbf93601232",
+                                                    "code": "SFGR0001",
+                                                    "name": "Ayam cincang",
+                                                    "recipe_outcome": 1000,
+                                                    "unit": "Gram (gr)",
+                                                    "total_ingredients": "11 ingredients"
+                                                },
+                                                {
+                                                    "id": "1238adbja-2f82-4282-8266-39dbf93601232",
+                                                    "code": "SFGR0002",
+                                                    "name": "Mie",
+                                                    "recipe_outcome": 1000,
+                                                    "unit": "Gram (gr)",
+                                                    "total_ingredients": "7 ingredients"
+                                                }
+                                            ],
+                                            "links": {
+                                                "first": "https://example.com/api/users?page=1",
+                                                "last": "https://example.com/api/users?page=5",
+                                                "prev": null,
+                                                "next": "https://example.com/api/users?page=2"
+                                            },
+                                            "meta": {
+                                                "current_page": 1,
+                                                "from": 1,
+                                                "last_page": 5,
+                                                "path": "https://example.com/api/users",
+                                                "per_page": 10,
+                                                "to": 10,
+                                                "total": 50
+                                            }
+                                        }
+                                    },
+                                    "hasil dengan pencarian": {
+                                        "value": {
+                                            "data": [
+                                                {
+                                                    "id": "I21316b53-2f82-4282-8266-39dbf93601232",
+                                                    "code": "SFGR0001",
+                                                    "item_name": "Ayam cincang",
+                                                    "recipe_outcome": 1000,
+                                                    "unit": "Gram (gr)",
+                                                    "total_ingredients": "11 ingredients"
+                                                },
+                                                {
+                                                    "id": "1238adbja-2f82-4282-8266-39dbf93601232",
+                                                    "code": "SFGR0010",
+                                                    "item_name": "Ayam giling",
+                                                    "recipe_outcome": 1000,
+                                                    "unit": "Gram (gr)",
+                                                    "total_ingredients": "7 ingredients"
+                                                }
+                                            ],
+                                            "links": {
+                                                "first": "https://example.com/api/users?page=1",
+                                                "last": "https://example.com/api/users?page=5",
+                                                "prev": null,
+                                                "next": "https://example.com/api/users?page=2"
+                                            },
+                                            "meta": {
+                                                "current_page": 1,
+                                                "from": 1,
+                                                "last_page": 5,
+                                                "path": "https://example.com/api/users",
+                                                "per_page": 10,
+                                                "to": 10,
+                                                "total": 50
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "post": {
                 "summary": "buat resep semi finish good baru",
                 "parameters": [
