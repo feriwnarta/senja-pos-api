@@ -1410,6 +1410,226 @@
                     }
                 }
             }
+        },
+        "/ingredients/recipes/finish-good": {
+            "get": {
+                "summary": "Menampilkan daftar resep menu (finish good), beserta fitur searching",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/authorization"
+                    },
+                    {
+                        "description": "cari resep menu berdasrkan code, item name, variant, atau unit",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "name": "q",
+                        "in": "query",
+                        "examples": {
+                            "cari berdasrkan nama item": {
+                                "value": "Nasi goreng"
+                            },
+                            "cari berdasrkan code": {
+                                "value": "FGR0001"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "sukses dapatkan daftar resep menu (finish good)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "sukses dapatkan daftar resep": {
+                                        "description": "Sukses dapatkan daftar resep tanpa pencarian atau menggunakan pencarian",
+                                        "value": {
+                                            "data": [
+                                                {
+                                                    "id": "DD816b53-2f82-4282-8266-39dbf93601231",
+                                                    "code": "FGR001",
+                                                    "name": "Nasi goreng",
+                                                    "variant": "Ayam",
+                                                    "total_ingredient": 7
+                                                },
+                                                {
+                                                    "id": "CC816b53-2f82-4282-8266-39dbf93601231",
+                                                    "code": "FGR002",
+                                                    "name": "Nasi goreng",
+                                                    "variant": "Babi",
+                                                    "total_ingredient": 8
+                                                },
+                                                {
+                                                    "id": "EE816b53-2f82-4282-8266-39dbf93601231",
+                                                    "code": "FGR003",
+                                                    "name": "Nasi goreng",
+                                                    "variant": "Sosis",
+                                                    "total_ingredient": 8
+                                                },
+                                                {
+                                                    "id": "GG816b53-2f82-4282-8266-39dbf93601231",
+                                                    "code": "FGR003",
+                                                    "name": "Chabihun",
+                                                    "variant": "Ayam",
+                                                    "total_ingredient": 12
+                                                }
+                                            ],
+                                            "links": {
+                                                "first": "https://example.com/api/users?page=1",
+                                                "last": "https://example.com/api/users?page=5",
+                                                "prev": null,
+                                                "next": "https://example.com/api/users?page=2"
+                                            },
+                                            "meta": {
+                                                "current_page": 1,
+                                                "from": 1,
+                                                "last_page": 5,
+                                                "path": "https://example.com/api/users",
+                                                "per_page": 10,
+                                                "to": 10,
+                                                "total": 50
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401Unauthorized"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Membuat resep menu baru (finish good) dengan variant atau tanpa variant",
+                "description": "jika menggunakan variant maka properti menu_variant_id wajib diisi, jika tanpa variant maka cukup string kosong ('') ",
+                "tags": [
+                    "Ingredients"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/authorization"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "menu_id": {
+                                        "type": "string",
+                                        "required": true,
+                                        "minLength": 36,
+                                        "maxLength": 36
+                                    },
+                                    "menu_variant_id": {
+                                        "description": "menu variant id tidak wajib jika menu tidak memiliki variant",
+                                        "type": "string",
+                                        "minLength": 36,
+                                        "maxLength": 36
+                                    },
+                                    "ingredients": {
+                                        "description": "isi dari properties ini adalah array dengan susunan id (raw / semi finish) dan usage",
+                                        "required": true,
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "minProperties": 2,
+                                            "properties": {
+                                                "ingredient_id": {
+                                                    "description": "id raw / semi finish ingredients",
+                                                    "required": true,
+                                                    "type": "string",
+                                                    "minLength": 36,
+                                                    "maxLength": 36
+                                                },
+                                                "usage": {
+                                                    "description": "jumlah pemakaian resep",
+                                                    "required": true,
+                                                    "type": "number",
+                                                    "minimum": 1
+                                                }
+                                            }
+                                        },
+                                        "minItems": 1
+                                    }
+                                }
+                            },
+                            "examples": {
+                                "buat resep menu dengan variant": {
+                                    "description": "buat resep menu baru jika menggunakan variant ada",
+                                    "value": {
+                                        "menu_id": "OGD816b53-2f82-4282-8266-39dbf93601231",
+                                        "menu_variant_id": "GGD816b53-2f82-4282-8266-39dbf93601231",
+                                        "ingredients": [
+                                            {
+                                                "id": "MNU816b53-2f82-4282-8266-39dbf93601231",
+                                                "usage": 1000
+                                            },
+                                            {
+                                                "id": "2MNU816b53-2f82-4282-8266-39dbf93601231",
+                                                "usage": 1200
+                                            }
+                                        ]
+                                    }
+                                },
+                                "buat resep menu tanpa variant": {
+                                    "description": "buat resep menu baru tanpa variant",
+                                    "value": {
+                                        "menu_id": "OGD816b53-2f82-4282-8266-39dbf93601231",
+                                        "menu_variant_id": "",
+                                        "ingredients": [
+                                            {
+                                                "id": "MNU816b53-2f82-4282-8266-39dbf93601231",
+                                                "usage": 1000
+                                            },
+                                            {
+                                                "id": "2MNU816b53-2f82-4282-8266-39dbf93601231",
+                                                "usage": 900
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Berhasil membuat resep menu (finish good) baru (belum selesai)"
+                    },
+                    "400": {
+                        "description": "gagal buat resep menu (finish good) karena validasi gagal",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "gagal validasi resep tidak ditentukan": {
+                                        "description": "gagal buat resep menu (finish good) saat ingredient property dikirim dengan array kosong (lihat schema request body)",
+                                        "value": {
+                                            "errors": {
+                                                "ingredients": [
+                                                    "The ingredients field must not empty"
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401Unauthorized"
+                    }
+                }
+            }
         }
     }
 }
